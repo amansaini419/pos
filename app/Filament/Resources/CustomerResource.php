@@ -20,6 +20,7 @@ use Filament\Forms\Form;
 use Filament\Forms\Set;
 use Filament\Resources\Resource;
 use Filament\Tables;
+use Filament\Tables\Actions\Action;
 use Filament\Tables\Actions\ActionGroup;
 use Filament\Tables\Actions\EditAction;
 use Filament\Tables\Actions\ViewAction;
@@ -183,7 +184,7 @@ class CustomerResource extends Resource
                     ->searchable()
                     ->toggleable(),
                 TextColumn::make('assignedTo.name')
-                    ->label('Agent')
+                    ->label('Sales Agent')
                     ->placeholder('Not Assigned')
                     ->searchable()
                     ->sortable(),
@@ -198,15 +199,40 @@ class CustomerResource extends Resource
                     ->sortable(),
             ])
             ->filters([
-                TernaryFilter::make('customer_type')
-                    ->label('Customer Type'),
+                SelectFilter::make('customer_type')
+                    ->label('Customer Type')
+                    ->options([
+                        CustomerTypeEnum::Cash->value => CustomerTypeEnum::Cash->name,
+                        CustomerTypeEnum::Credit->value => CustomerTypeEnum::Credit->name,
+                    ]),
                 SelectFilter::make('assigned_to')
+                    ->label('Sales Agent')
                     ->relationship('assignedTo', 'name'),
             ])
             ->actions([
                 ActionGroup::make([
-                    ViewAction::make(),
-                    EditAction::make(),
+                    Action::make('assign')
+                        ->label('Assign Sales Agent')
+                        ->icon('heroicon-o-user')
+                        ->color('warning')
+                        ->action(fn (Customer $record) => $record->update(['customer_status' => CustomerStatusEnum::Blacklisted->value]))
+                        ->hidden(fn (Customer $record) => $record->assigned_to !== 0),
+                    Action::make('approve')
+                        ->label('Approve')
+                        ->icon('heroicon-o-check')
+                        ->color('success')
+                        ->action(fn (Customer $record) => $record->update(['customer_status' => CustomerStatusEnum::Approved->value]))
+                        ->hidden(fn (Customer $record) => $record->customer_status === CustomerStatusEnum::Approved->value),
+                    Action::make('blacklist')
+                        ->label('Blacklist')
+                        ->color('danger')
+                        ->icon('heroicon-o-no-symbol')
+                        ->action(fn (Customer $record) => $record->update(['customer_status' => CustomerStatusEnum::Blacklisted->value]))
+                        ->hidden(fn (Customer $record) => $record->customer_status === CustomerStatusEnum::Blacklisted->value),
+                    ViewAction::make()
+                        ->color('info'),
+                    EditAction::make()
+                        ->color('info'),
                 ])
             ])
             ->bulkActions([

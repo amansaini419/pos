@@ -18,4 +18,9 @@ class CreateProductGroup extends CreateRecord
             ->title('New product group added')
             ->body('The new product group has been added successfully.');
     }
+
+    protected function getRedirectUrl(): string
+    {
+        return $this->getResource()::getUrl('index');
+    }
 }

@@ -3,6 +3,7 @@
 namespace App\Filament\Resources\CustomerResource\Pages;
 
 use App\Enums\Customer\CustomerStatusEnum;
+use App\Enums\SubAdmin\SubAdminRoleEnum;
 use App\Filament\Resources\CustomerResource;
 use App\Models\Customer;
 use App\Models\User;
@@ -31,16 +32,16 @@ class ListCustomers extends ListRecords
         //dd(auth()->user()->roles()->updateOrCreate(['role' => 'admin']));
         return [
             'all' => Tab::make('All Customers')
-                /* ->badge(Customer::query()->count()) */,
+            /* ->badge(Customer::query()->count()) */,
             'pending' => Tab::make('Pending Customers')
                 ->modifyQueryUsing(fn (Builder $query) => $query->where('customer_status', CustomerStatusEnum::Pending))
-                /* ->badge(Customer::query()->where('customer_status', CustomerStatusEnum::Pending)->count()) */,
+            /* ->badge(Customer::query()->where('customer_status', CustomerStatusEnum::Pending)->count()) */,
             'approved' => Tab::make('Approved Customers')
                 ->modifyQueryUsing(fn (Builder $query) => $query->where('customer_status', CustomerStatusEnum::Approved))
-                /* ->badge(Customer::query()->where('customer_status', CustomerStatusEnum::Approved)->count()) */,
+            /* ->badge(Customer::query()->where('customer_status', CustomerStatusEnum::Approved)->count()) */,
             'blacklisted' => Tab::make('Blacklisted Customers')
                 ->modifyQueryUsing(fn (Builder $query) => $query->where('customer_status', CustomerStatusEnum::Blacklisted))
-                /* ->badge(Customer::query()->where('customer_status', CustomerStatusEnum::Blacklisted)->count()) */,
+            /* ->badge(Customer::query()->where('customer_status', CustomerStatusEnum::Blacklisted)->count()) */,
         ];
     }
 }

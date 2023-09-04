@@ -4,6 +4,7 @@ namespace App\Filament\Resources;
 
 use App\Enums\Customer\CustomerStatusEnum;
 use App\Enums\Customer\CustomerTypeEnum;
+use App\Enums\SubAdmin\SubAdminRoleEnum;
 use App\Filament\Resources\CustomerResource\Pages;
 use App\Filament\Resources\CustomerResource\RelationManagers;
 use App\Models\Customer;
@@ -187,7 +188,8 @@ class CustomerResource extends Resource
                     ->label('Sales Agent')
                     ->placeholder('Not Assigned')
                     ->searchable()
-                    ->sortable(),
+                    ->sortable()
+                    ->hidden(!auth()->user()->hasPermission('customer:viewAssignedToColumn')),
                 TextColumn::make('customer_type')
                     ->state(function (Model $record): string {
                         return match ((int)$record->customer_type) {
@@ -207,7 +209,8 @@ class CustomerResource extends Resource
                     ]),
                 SelectFilter::make('assigned_to')
                     ->label('Sales Agent')
-                    ->relationship('assignedTo', 'name'),
+                    ->relationship('assignedTo', 'name')
+                    ->hidden(!auth()->user()->hasPermission('customer:viewAssignedToFilter')),
             ])
             ->actions([
                 ActionGroup::make([
@@ -216,19 +219,20 @@ class CustomerResource extends Resource
                         ->icon('heroicon-o-user')
                         ->color('warning')
                         ->action(fn (Customer $record) => $record->update(['customer_status' => CustomerStatusEnum::Blacklisted->value]))
-                        ->hidden(fn (Customer $record) => $record->assigned_to !== 0),
+                        ->hidden(fn (Customer $record) => ($record->assigned_to !== 0 || !auth()->user()->hasPermission('customer:assign'))),
                     Action::make('approve')
                         ->label('Approve')
                         ->icon('heroicon-o-check')
                         ->color('success')
                         ->action(fn (Customer $record) => $record->update(['customer_status' => CustomerStatusEnum::Approved->value]))
-                        ->hidden(fn (Customer $record) => $record->customer_status === CustomerStatusEnum::Approved->value),
+                        //->hidden(true),
+                        ->hidden(fn (Customer $record) => ($record->customer_status === CustomerStatusEnum::Approved->value || !auth()->user()->hasPermission('customer:approve'))),
                     Action::make('blacklist')
                         ->label('Blacklist')
                         ->color('danger')
                         ->icon('heroicon-o-no-symbol')
                         ->action(fn (Customer $record) => $record->update(['customer_status' => CustomerStatusEnum::Blacklisted->value]))
-                        ->hidden(fn (Customer $record) => $record->customer_status === CustomerStatusEnum::Blacklisted->value),
+                        ->hidden(fn (Customer $record) => ($record->customer_status === CustomerStatusEnum::Blacklisted->value || !auth()->user()->hasPermission('customer:blacklist'))),
                     ViewAction::make()
                         ->color('info'),
                     EditAction::make()
@@ -260,4 +264,15 @@ class CustomerResource extends Resource
             'edit' => Pages\EditCustomer::route('/{record}/edit'),
         ];
     }
+
+    public static function getEloquentQuery(): Builder
+    {
+        //dd(parent::getEloquentQuery()->where('assigned_to', auth()->id()));
+        if(auth()->user()->hasRole(SubAdminRoleEnum::SALESAGENT->value)){
+            return parent::getEloquentQuery()->where('assigned_to', auth()->id());
+        }
+        return parent::getEloquentQuery();
+    }
+
+
 }

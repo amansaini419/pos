@@ -18,4 +18,9 @@ class CreateProduct extends CreateRecord
             ->title('New product added')
             ->body('The new product has been added successfully.');
     }
+
+    protected function getRedirectUrl(): string
+    {
+        return $this->getResource()::getUrl('index');
+    }
 }

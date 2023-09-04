@@ -16,7 +16,7 @@ class CreateCustomer extends CreateRecord
     {
         $data['customer_number'] = date('ym') . str_pad(Customer::count() + 1, 6, '0', STR_PAD_LEFT);
         $data['added_by'] = auth()->id();
-        if(!isset($data['assigned_to'])){
+        if (!isset($data['assigned_to'])) {
             $data['assigned_to'] = auth()->user()->hasRole('sales_agent') ? auth()->id() : 0;
         }
         return $data;
@@ -28,5 +28,10 @@ class CreateCustomer extends CreateRecord
             ->success()
             ->title('New customer added')
             ->body('The new customer has been added successfully.');
+    }
+
+    protected function getRedirectUrl(): string
+    {
+        return $this->getResource()::getUrl('index');
     }
 }

@@ -37,6 +37,14 @@ class ProductGroupResource extends Resource
 
     protected static ?int $navigationSort = 1;
 
+    /* public static function getEloquentQuery(): Builder
+    {
+        if(auth()->user()->hasPermission('productGroup:list')){
+            return parent::getEloquentQuery();
+        }
+        return parent::getEloquentQuery()->where('id', -1);
+    } */
+
     public static function form(Form $form): Form
     {
         return $form

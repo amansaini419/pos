@@ -25,4 +25,9 @@ class CreateSale extends CreateRecord
             ->title('New sale added')
             ->body('The new sale has been added successfully.');
     }
+
+    protected function getRedirectUrl(): string
+    {
+        return $this->getResource()::getUrl('index');
+    }
 }

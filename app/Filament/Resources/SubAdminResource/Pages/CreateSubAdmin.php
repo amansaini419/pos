@@ -18,4 +18,9 @@ class CreateSubAdmin extends CreateRecord
             ->title('New subadmin added')
             ->body('The new subadmin has been added successfully.');
     }
+
+    protected function getRedirectUrl(): string
+    {
+        return $this->getResource()::getUrl('index');
+    }
 }

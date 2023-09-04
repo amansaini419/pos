@@ -32,7 +32,7 @@ class AdminPanelProvider extends PanelProvider
                 'primary' => '#9dc23b',
             ])
             //->font()
-            ->favicon('https://laravel.com/img/favicon/favicon-32x32.png')
+            //->favicon('https://laravel.com/img/favicon/favicon-32x32.png')
             ->darkMode(true)
             ->discoverResources(in: app_path('Filament/Resources'), for: 'App\\Filament\\Resources')
             ->discoverPages(in: app_path('Filament/Pages'), for: 'App\\Filament\\Pages')

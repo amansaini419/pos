@@ -153,7 +153,7 @@ class SaleResource extends Resource
                     ->sortable(),
                 TextColumn::make('payment_type')
                     ->state(function (Model $record): string {
-                        return match ($record->payment_type) {
+                        return match ((int)$record->payment_type) {
                             PaymentTypeEnum::Cash->value => PaymentTypeEnum::Cash->name,
                             PaymentTypeEnum::Credit->value => PaymentTypeEnum::Credit->name,
                         };

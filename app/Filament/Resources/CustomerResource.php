@@ -190,7 +190,7 @@ class CustomerResource extends Resource
                     ->sortable(),
                 TextColumn::make('customer_type')
                     ->state(function (Model $record): string {
-                        return match ($record->customer_type) {
+                        return match ((int)$record->customer_type) {
                             CustomerTypeEnum::Cash->value => CustomerTypeEnum::Cash->name,
                             CustomerTypeEnum::Credit->value => CustomerTypeEnum::Credit->name,
                         };

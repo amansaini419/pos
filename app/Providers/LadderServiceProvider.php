@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use App\Enums\SubAdmin\SubAdminRoleEnum;
 use Illuminate\Support\ServiceProvider;
 use Ladder\Ladder;
 
@@ -28,13 +29,14 @@ class LadderServiceProvider extends ServiceProvider
      */
     protected function configurePermissions(): void
     {
-        Ladder::role('admin', 'Administrator', [
+        Ladder::role(SubAdminRoleEnum::ADMIN->value, SubAdminRoleEnum::ADMIN->name, [
             'customer:create', 'customer:read', 'customer:update', 'customer:delete',
             'product:create', 'product:read', 'product:update', 'product:delete',
         ])->description('Administrator users can perform any action.');
 
-        Ladder::role('sales_agent', 'Sales Agent', [
+        Ladder::role(SubAdminRoleEnum::SALESAGENT->value, SubAdminRoleEnum::SALESAGENT->name, [
             'customer:read', 'customer:create',
+            'sale:read', 'sale:create',
         ])->description('Sales Agent users have the ability to read and create the customer, .');
     }
 }

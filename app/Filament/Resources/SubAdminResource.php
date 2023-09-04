@@ -8,6 +8,11 @@ use App\Filament\Resources\SubAdminResource\RelationManagers;
 use App\Models\SubAdmin;
 use App\Models\User;
 use Filament\Forms;
+use Filament\Forms\Components\Fieldset;
+use Filament\Forms\Components\Repeater;
+use Filament\Forms\Components\Section;
+use Filament\Forms\Components\Select;
+use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
@@ -29,7 +34,38 @@ class SubAdminResource extends Resource
     {
         return $form
             ->schema([
-                //
+                Section::make()
+                    ->schema([
+                        TextInput::make('name')
+                            ->label('Full name')
+                            ->autocapitalize('words')
+                            ->required(),
+                        TextInput::make('email')
+                            ->label('Email address')
+                            ->email()
+                            ->unique(ignoreRecord: true)
+                            ->required(),
+                        TextInput::make('password')
+                            ->password()
+                            ->required(),
+                        Repeater::make('roles')
+                            ->label('Role')
+                            ->relationship()
+                            ->schema([
+                                Select::make('role')
+                                    ->label('')
+                                    ->options([
+                                        SubAdminRoleEnum::ADMIN->value => SubAdminRoleEnum::ADMIN->name,
+                                        SubAdminRoleEnum::SALESAGENT->value => SubAdminRoleEnum::SALESAGENT->name,
+                                        SubAdminRoleEnum::FINANCE->value => SubAdminRoleEnum::FINANCE->name,
+                                        SubAdminRoleEnum::WAREHOUSE->value => SubAdminRoleEnum::WAREHOUSE->name,
+                                        SubAdminRoleEnum::OPERATIONS->value => SubAdminRoleEnum::OPERATIONS->name,
+                                    ]),
+                            ])->addable(false)
+                            ->deletable(false)
+                            ->required()
+                    ])->columns(2)
+
             ]);
     }
 
@@ -37,11 +73,15 @@ class SubAdminResource extends Resource
     {
         return $table
             ->columns([
-                TextColumn::make('name'),
-                TextColumn::make('email'),
+                TextColumn::make('name')
+                    ->searchable()
+                    ->sortable(),
+                TextColumn::make('email')
+                    ->searchable()
+                    ->sortable(),
                 TextColumn::make('roles.role')
                     ->state(function (Model $record): string {
-                        return match ($record->roles()->role) {
+                        return match ($record->roles[0]->role) {
                             SubAdminRoleEnum::ADMIN->value => SubAdminRoleEnum::ADMIN->name,
                             SubAdminRoleEnum::SALESAGENT->value => SubAdminRoleEnum::SALESAGENT->name,
                             SubAdminRoleEnum::FINANCE->value => SubAdminRoleEnum::FINANCE->name,
@@ -49,8 +89,16 @@ class SubAdminResource extends Resource
                             SubAdminRoleEnum::OPERATIONS->value => SubAdminRoleEnum::OPERATIONS->name,
                         };
                     })
+                    /* ->state(function (Model $record): string {
+                        return json_encode($record->roles[0]);
+                    }) */
                     ->searchable()
                     ->sortable(),
+                TextColumn::make('permission')
+                    ->state(function (Model $record): array {
+                        return $record->rolePermissions($record->roles[0]->role);
+                    })
+                    ->listWithLineBreaks()
             ])
             ->filters([
                 //

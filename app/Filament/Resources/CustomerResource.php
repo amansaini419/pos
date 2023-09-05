@@ -23,6 +23,8 @@ use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Actions\Action;
 use Filament\Tables\Actions\ActionGroup;
+use Filament\Tables\Actions\BulkAction;
+use Filament\Tables\Actions\BulkActionGroup;
 use Filament\Tables\Actions\EditAction;
 use Filament\Tables\Actions\ViewAction;
 use Filament\Tables\Columns\IconColumn;
@@ -145,10 +147,10 @@ class CustomerResource extends Resource
                                 ]),
 
                                 Select::make('assigned_to')
-                                    ->hidden(auth()->user()->hasRole('sales_agent'))
-                                    ->options(User::all()->load('roles')->where('role', 'like', 'sales_agent')->pluck('name', 'id'))
+                                    ->visible(auth()->user()->hasPermission('customer:viewAssignedToField'))
+                                    ->options(User::join('user_role', 'users.id', '=', 'user_role.user_id')->where('role', 'sales_agent')->get()->pluck('name', 'id'))
                                     ->label('Sales Agent')
-                                    ->searchable()
+                                    //->searchable()
                             ])->columns(2)
                     ])->columnSpanFull()
             ]);
@@ -189,7 +191,7 @@ class CustomerResource extends Resource
                     ->placeholder('Not Assigned')
                     ->searchable()
                     ->sortable()
-                    ->hidden(!auth()->user()->hasPermission('customer:viewAssignedToColumn')),
+                    ->visible(auth()->user()->hasPermission('customer:viewAssignedToColumn')),
                 TextColumn::make('customer_type')
                     ->state(function (Model $record): string {
                         return match ((int)$record->customer_type) {
@@ -218,14 +220,27 @@ class CustomerResource extends Resource
                         ->label('Assign Sales Agent')
                         ->icon('heroicon-o-user')
                         ->color('warning')
-                        ->action(fn (Customer $record) => $record->update(['customer_status' => CustomerStatusEnum::Blacklisted->value]))
-                        ->hidden(fn (Customer $record) => ($record->assigned_to !== 0 || !auth()->user()->hasPermission('customer:assign'))),
+                        ->hidden(fn (Customer $record) => ($record->assigned_to !== 0 || !auth()->user()->hasPermission('customer:assign')))
+                        //->slideover()
+                        ->form([
+                            Select::make('assigned_to')
+                                ->visible(auth()->user()->hasPermission('customer:viewAssignedToField'))
+                                ->options(User::join('user_role', 'users.id', '=', 'user_role.user_id')->where('role', 'sales_agent')->get()->pluck('name', 'id'))
+                                ->label('Sales Agent')
+                                ->required(),
+                        ])
+                        ->action(
+                            function (Customer $record, array $data): void {
+                                /* $record->assigned_to = $data['assigned_to'];
+                                $record->save(); */
+                                $record->update($data);
+                            }
+                        ),
                     Action::make('approve')
                         ->label('Approve')
                         ->icon('heroicon-o-check')
                         ->color('success')
                         ->action(fn (Customer $record) => $record->update(['customer_status' => CustomerStatusEnum::Approved->value]))
-                        //->hidden(true),
                         ->hidden(fn (Customer $record) => ($record->customer_status === CustomerStatusEnum::Approved->value || !auth()->user()->hasPermission('customer:approve'))),
                     Action::make('blacklist')
                         ->label('Blacklist')
@@ -240,7 +255,13 @@ class CustomerResource extends Resource
                 ])
             ])
             ->bulkActions([
-                /* Tables\Actions\BulkActionGroup::make([
+                /* BulkActionGroup::make([
+                    BulkAction::make('groupApprove')
+                        ->label('Approve selected')
+                        ->icon('heroicon-o-check')
+                        ->color('success')
+                        ->action(fn (Collection $record) => $record->update(['customer_status' => CustomerStatusEnum::Approved->value]))
+                        ->hidden(fn (Customer $record) => ($record->customer_status === CustomerStatusEnum::Approved->value || !auth()->user()->hasPermission('customer:approve'))),
                     Tables\Actions\DeleteBulkAction::make(),
                 ]), */
             ])
@@ -267,6 +288,7 @@ class CustomerResource extends Resource
 
     public static function getEloquentQuery(): Builder
     {
+        //dd(User::join('user_role', 'users.id', '=', 'user_role.user_id')->where('role', 'sales_agent')->get()->pluck('name', 'id')/* ->where('role', 'sales_agent')->pluck('name', 'id') */);
         //dd(parent::getEloquentQuery()->where('assigned_to', auth()->id()));
         if(auth()->user()->hasRole(SubAdminRoleEnum::SALESAGENT->value)){
             return parent::getEloquentQuery()->where('assigned_to', auth()->id());

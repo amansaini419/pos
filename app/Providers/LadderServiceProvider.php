@@ -31,7 +31,7 @@ class LadderServiceProvider extends ServiceProvider
     {
         Ladder::role(SubAdminRoleEnum::ADMIN->value, SubAdminRoleEnum::ADMIN->name, [
             'subadmin', 'productGroup', 'product',
-            'customer:viewAny', 'customer:view', 'customer:create', 'customer:update', 'customer:delete', 'customer:viewAssignedToColumn', 'customer:viewAssignedToFilter', 'customer:approve', 'customer:blacklist', 'customer:assign',
+            'customer:viewAny', 'customer:view', 'customer:create', 'customer:update', 'customer:delete', 'customer:viewAssignedToColumn', 'customer:viewAssignedToFilter', 'customer:approve', 'customer:blacklist', 'customer:assign', 'customer:viewAssignedToField',
             'product:create', 'product:read', 'product:update', 'product:delete',
         ])->description('Administrator users can perform any action.');
 

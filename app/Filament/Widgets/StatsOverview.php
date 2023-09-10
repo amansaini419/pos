@@ -10,9 +10,11 @@ class StatsOverview extends BaseWidget
 {
     protected static ?int $sort = 0;
 
-    protected int | string | array $columnSpan = [
-        'xl' => 6,
-    ];
+    protected static ?string $pollingInterval = null;
+
+    protected function getColumns(): int {
+        return 4;
+    }
 
     protected function getStats(): array
     {

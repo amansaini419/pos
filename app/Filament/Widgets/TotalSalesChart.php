@@ -10,6 +10,10 @@ class TotalSalesChart extends ChartWidget
 
     protected static ?int $sort = 1;
 
+    protected static ?string $maxHeight = '400px';
+
+    protected static ?string $pollingInterval = null;
+
     protected function getData(): array
     {
         return [

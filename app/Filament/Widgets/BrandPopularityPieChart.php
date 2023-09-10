@@ -10,12 +10,32 @@ class BrandPopularityPieChart extends ChartWidget
 
     protected static ?int $sort = 2;
 
+    protected static ?string $maxHeight = '300px';
+
+    protected static ?string $pollingInterval = null;
+
+    protected static ?array $options = [
+        /* 'plugins' => [
+            'legend' => [
+                'display' => true,
+            ],
+        ], */
+        'scales' => [
+            'x' => [
+                'display' => false,
+            ],
+            'y' => [
+                'display' => false,
+            ],
+        ]
+    ];
+
     protected function getData(): array
     {
         return [
             'datasets' => [
                 [
-                    //'label' => 'Total deliveries',
+                    'label' => 'Total deliveries',
                     'data' => [50, 160],
                     'backgroundColor' => [
                         'rgb(255, 99, 132)',

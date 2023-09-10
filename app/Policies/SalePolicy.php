@@ -4,14 +4,14 @@ namespace App\Policies;
 
 use App\Models\User;
 
-class CustomerPolicy
+class SalePolicy
 {
     /**
      * Determine whether the user can view any models.
      */
     public function viewAny(User $user): bool
     {
-        return $user->hasPermission('customer:viewAny');
+        return $user->hasPermission('sale:viewAny');
     }
 
     /**
@@ -19,7 +19,7 @@ class CustomerPolicy
      */
     public function view(User $user): bool
     {
-        return $user->hasPermission('customer:view');
+        return $user->hasPermission('sale:view');
     }
 
     /**
@@ -27,7 +27,7 @@ class CustomerPolicy
      */
     public function create(User $user): bool
     {
-        return $user->hasPermission('customer:create');
+        return $user->hasPermission('sale:create');
     }
 
     /**
@@ -35,7 +35,7 @@ class CustomerPolicy
      */
     public function update(User $user): bool
     {
-        return $user->hasPermission('customer:update');
+        return $user->hasPermission('sale:update');
     }
 
     /**
@@ -43,7 +43,7 @@ class CustomerPolicy
      */
     public function delete(User $user): bool
     {
-        return $user->hasPermission('customer:delete');
+        return $user->hasPermission('sale:delete');
     }
 
     /**

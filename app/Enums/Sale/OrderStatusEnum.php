@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Enums\Customer;
+namespace App\Enums\Sale;
 
 enum OrderStatusEnum:int {
     case Pending = 0;

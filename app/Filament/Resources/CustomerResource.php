@@ -212,7 +212,7 @@ class CustomerResource extends Resource
                 SelectFilter::make('assigned_to')
                     ->label('Sales Agent')
                     ->relationship('assignedTo', 'name')
-                    ->hidden(!auth()->user()->hasPermission('customer:viewAssignedToFilter')),
+                    ->visible(auth()->user()->hasPermission('customer:viewAssignedToFilter')),
             ])
             ->actions([
                 ActionGroup::make([

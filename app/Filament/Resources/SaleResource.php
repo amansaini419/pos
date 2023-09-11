@@ -204,9 +204,9 @@ class SaleResource extends Resource
                     })
                     ->searchable()
                     ->sortable(),
+
                 TextColumn::make('created_at')
                     ->date()
-                    ->searchable()
                     ->sortable(),
             ])
             ->filters([
@@ -270,8 +270,8 @@ class SaleResource extends Resource
         if(auth()->user()->hasRole(SubAdminRoleEnum::SALESAGENT->value)){
             return parent::getEloquentQuery()->withWhereHas('customer', function ($query) {
                 $query->where('assigned_to', auth()->id());
-            });
+            })->latest();
         }
-        return parent::getEloquentQuery();
+        return parent::getEloquentQuery()->latest();
     }
 }

@@ -14,7 +14,7 @@ class CreateSale extends CreateRecord
 
     protected function mutateFormDataBeforeCreate(array $data): array
     {
-        $data['order_number'] = date('ym') . str_pad(Sale::count() + 1, 6, '0', STR_PAD_LEFT);
+        $data['order_number'] = date('ym') . str_pad((Sale::latest('id')->first()->id ?? 0) + 1, 6, '0', STR_PAD_LEFT);
         return $data;
     }
 

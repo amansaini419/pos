@@ -1,15 +1,15 @@
 <?php
 
-namespace App\Filament\Resources\ProductGroupResource\Pages;
+namespace App\Filament\Resources\PurchaseResource\Pages;
 
-use App\Filament\Resources\ProductGroupResource;
+use App\Filament\Resources\PurchaseResource;
 use Filament\Actions;
 use Filament\Notifications\Notification;
 use Filament\Resources\Pages\EditRecord;
 
-class EditProductGroup extends EditRecord
+class EditPurchase extends EditRecord
 {
-    protected static string $resource = ProductGroupResource::class;
+    protected static string $resource = PurchaseResource::class;
 
     protected function getHeaderActions(): array
     {
@@ -22,7 +22,7 @@ class EditProductGroup extends EditRecord
     {
         return Notification::make()
             ->success()
-            ->title('Product group updated')
-            ->body('The product group has been updated successfully.');
+            ->title('Purchase updated')
+            ->body('The purchase has been updated successfully.');
     }
 }

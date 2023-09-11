@@ -42,4 +42,8 @@ class User extends Authenticatable
     /* public function role(): HasOne{
         return $this->
     } */
+
+    public function addedPurchases(): HasMany{
+        return $this->hasMany(Purchase::class, 'added_by');
+    }
 }

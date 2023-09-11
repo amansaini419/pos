@@ -14,7 +14,7 @@ class CreateCustomer extends CreateRecord
 
     protected function mutateFormDataBeforeCreate(array $data): array
     {
-        $data['customer_number'] = date('ym') . str_pad(Customer::count() + 1, 6, '0', STR_PAD_LEFT);
+        $data['customer_number'] = date('ym') . str_pad((Customer::latest('id')->first()->id ?? 0) + 1, 6, '0', STR_PAD_LEFT);
         $data['added_by'] = auth()->id();
         if (!isset($data['assigned_to'])) {
             $data['assigned_to'] = auth()->user()->hasRole('sales_agent') ? auth()->id() : 0;

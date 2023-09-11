@@ -19,6 +19,7 @@ use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
 use Filament\Forms\Set;
+use Filament\Notifications\Notification;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Actions\Action;
@@ -235,19 +236,37 @@ class CustomerResource extends Resource
                                 $record->save(); */
                                 $record->update($data);
                             }
+                        )
+                        ->successNotification(
+                            Notification::make()
+                                ->success()
+                                ->title('Customer assigned')
+                                ->body('The customer has been assigned successfully.')
                         ),
                     Action::make('approve')
                         ->label('Approve')
                         ->icon('heroicon-o-check')
                         ->color('success')
                         ->action(fn (Customer $record) => $record->update(['customer_status' => CustomerStatusEnum::Approved->value]))
-                        ->hidden(fn (Customer $record) => ($record->customer_status === CustomerStatusEnum::Approved->value || !auth()->user()->hasPermission('customer:approve'))),
+                        ->hidden(fn (Customer $record) => ($record->customer_status === CustomerStatusEnum::Approved->value || !auth()->user()->hasPermission('customer:approve')))
+                        ->successNotification(
+                            Notification::make()
+                                ->success()
+                                ->title('Customer approved')
+                                ->body('The customer has been approved successfully.')
+                        ),
                     Action::make('blacklist')
                         ->label('Blacklist')
                         ->color('danger')
                         ->icon('heroicon-o-no-symbol')
                         ->action(fn (Customer $record) => $record->update(['customer_status' => CustomerStatusEnum::Blacklisted->value]))
-                        ->hidden(fn (Customer $record) => ($record->customer_status === CustomerStatusEnum::Blacklisted->value || !auth()->user()->hasPermission('customer:blacklist'))),
+                        ->hidden(fn (Customer $record) => ($record->customer_status === CustomerStatusEnum::Blacklisted->value || !auth()->user()->hasPermission('customer:blacklist')))
+                        ->successNotification(
+                            Notification::make()
+                                ->success()
+                                ->title('Customer blacklisted')
+                                ->body('The customer has been blacklisted successfully.')
+                        ),
                     ViewAction::make()
                         ->color('info'),
                     EditAction::make()
@@ -291,9 +310,9 @@ class CustomerResource extends Resource
         //dd(User::join('user_role', 'users.id', '=', 'user_role.user_id')->where('role', 'sales_agent')->get()->pluck('name', 'id')/* ->where('role', 'sales_agent')->pluck('name', 'id') */);
         //dd(parent::getEloquentQuery()->where('assigned_to', auth()->id()));
         if(auth()->user()->hasRole(SubAdminRoleEnum::SALESAGENT->value)){
-            return parent::getEloquentQuery()->where('assigned_to', auth()->id());
+            return parent::getEloquentQuery()->where('assigned_to', auth()->id())->latest();
         }
-        return parent::getEloquentQuery();
+        return parent::getEloquentQuery()->latest();
     }
 
 

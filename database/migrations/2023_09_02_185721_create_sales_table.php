@@ -14,7 +14,7 @@ return new class extends Migration
     {
         Schema::create('sales', function (Blueprint $table) {
             $table->id();
-            $table->string('order_number', 10);
+            $table->string('order_number', 10)->unique();
             $table->foreignIdFor(Customer::class);
             $table->smallInteger('payment_type');
             $table->double('discount')->default(0);

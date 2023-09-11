@@ -15,7 +15,7 @@ return new class extends Migration
     {
         Schema::create('purchases', function (Blueprint $table) {
             $table->id();
-            $table->string('order_number', 13);
+            $table->string('order_number', 13)->unique();
             $table->foreignIdFor(User::class, 'added_by');
             $table->foreignIdFor(Product::class);
             $table->integer('quantity');

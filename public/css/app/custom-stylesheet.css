@@ -1,9 +1,9 @@
 :root{
     --reflo-light-green: #e7f0ce;
-    --reflo-green: #9ec33a;
-    --reflo-blue: #57a5e3;
+    --reflo-green: #9fc43a;
+    --reflo-blue: #58a5e1;
     --reflo-white: #fefefe;
-    --reflo-black: #09090b;
+    --reflo-black: #231f20;
 }
 
 .fi-simple-layout{

@@ -29,7 +29,7 @@ class AdminPanelProvider extends PanelProvider
             ->login()
             ->colors([
                 //'primary' => Color::Amber,#9dc23b
-                'primary' => '#57a5e3',
+                'primary' => '#58a5e1',
             ])
             //->font()
             //->favicon('https://laravel.com/img/favicon/favicon-32x32.png')

@@ -29,6 +29,7 @@ use Filament\Tables\Actions\Action as ActionsAction;
 use Filament\Tables\Actions\ActionGroup;
 use Filament\Tables\Actions\EditAction;
 use Filament\Tables\Actions\ViewAction;
+use Filament\Tables\Columns\IconColumn;
 use Filament\Tables\Columns\Summarizers\Sum;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Filters\SelectFilter;
@@ -165,6 +166,18 @@ class SaleResource extends Resource
                     ->label('Customer Name')
                     ->searchable()
                     ->sortable(),
+                IconColumn::make('order_status')
+                    ->label('Status')
+                    ->icon(fn (int $state): string => match ($state) {
+                        OrderStatusEnum::Pending->value => 'heroicon-o-clock',
+                        OrderStatusEnum::Approved->value => 'heroicon-o-check',
+                        OrderStatusEnum::Rejected->value => 'heroicon-o-no-symbol',
+                    })
+                    ->color(fn (int $state): string => match ($state) {
+                        OrderStatusEnum::Pending->value => 'warning',
+                        OrderStatusEnum::Approved->value => 'success',
+                        OrderStatusEnum::Rejected->value => 'danger',
+                    }),
                 TextColumn::make('saleProducts.product.name')
                     ->label('Item')
                     ->searchable()
@@ -215,7 +228,7 @@ class SaleResource extends Resource
                         ->icon('heroicon-o-check')
                         ->color('success')
                         ->action(fn (Sale $record) => $record->update(['order_status' => OrderStatusEnum::Approved->value]))
-                        ->hidden(fn (Sale $record) => ($record->order_status === OrderStatusEnum::Approved->value || !auth()->user()->hasPermission('sale:approve'))),
+                        ->hidden(fn (Sale $record) => ($record->order_status !== OrderStatusEnum::Pending->value || !auth()->user()->hasPermission('sale:approve'))),
                     ActionsAction::make('reject')
                         ->label('Reject')
                         ->color('danger')
@@ -256,8 +269,8 @@ class SaleResource extends Resource
     {
         if(auth()->user()->hasRole(SubAdminRoleEnum::SALESAGENT->value)){
             return parent::getEloquentQuery()->withWhereHas('customer', function ($query) {
-                    $query->where('assigned_to', auth()->id());
-                });
+                $query->where('assigned_to', auth()->id());
+            });
         }
         return parent::getEloquentQuery();
     }

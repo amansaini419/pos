@@ -1,0 +1,63 @@
+:root{
+    --reflo-light-green: #e7f0ce;
+    --reflo-green: #9ec33a;
+    --reflo-blue: #57a5e3;
+    --reflo-white: #fefefe;
+    --reflo-black: #09090b;
+}
+
+.fi-simple-layout{
+    background-color: var(--reflo-light-green);
+}
+
+.fi-sidebar{
+    background-color: var(--reflo-green) !important;
+}
+
+.fi-sidebar-group div span,
+.fi-sidebar-group button svg.fi-icon-btn-icon,
+.fi-sidebar-item a,
+.fi-sidebar-item a svg.fi-sidebar-item-icon{
+    color: var(--reflo-white) !important;
+}
+
+.fi-sidebar-item a:focus, .fi-sidebar-item a:active{
+    background-color: transparent !important;
+}
+
+.fi-sidebar-item a:hover{
+    background-color: var(--reflo-white) !important;
+}
+
+.fi-sidebar-item a:hover,
+.fi-sidebar-item a:hover svg.fi-sidebar-item-icon{
+    color: var(--reflo-black) !important;
+}
+
+.fi-sidebar-item.fi-sidebar-item-active a{
+    background-color: var(--reflo-white) !important;
+}
+
+.fi-sidebar-item.fi-sidebar-item-active a, .fi-sidebar-item.fi-sidebar-item-active a svg.fi-sidebar-item-icon{
+    color: var(--reflo-blue) !important;
+}
+
+
+.dashboard-card{
+    background-color: var(--reflo-blue) !important;
+}
+
+.dashboard-card .tracking-tight,
+.dashboard-card span{
+    color: var(--reflo-white) !important;
+}
+
+.dashboard-card span{
+    font-size: 12px;
+}
+
+.dashboard-card .tracking-tight{
+    font-size: 14px;
+}
+
+

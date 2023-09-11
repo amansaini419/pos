@@ -19,15 +19,45 @@ class StatsOverview extends BaseWidget
     protected function getStats(): array
     {
         return [
-            Stat::make('Total Sales Completed', '5/7'),
-            Stat::make('Total Pending Debt', '8/17'),
-            Stat::make('Total Sales Completed', '11/40'),
-            Stat::make('Total Sales Completed', '1/5'),
+            Stat::make('Total Sales Completed', '5/7')
+                ->extraAttributes([
+                    'class' => 'dashboard-card'
+                ]),
 
-            Stat::make('Approved Sales Order', '6/14'),
-            Stat::make('Total Delivered Products', '30/34'),
-            Stat::make('Total Commission Earned', 'GHs 24,500/ GHs 70,000'),
-            Stat::make('Total Approved Customers', '6/20'),
+            Stat::make('Total Pending Debt', '8/17')
+                ->extraAttributes([
+                    'class' => 'dashboard-card'
+                ]),
+
+            Stat::make('Total Sales Completed', '11/40')
+                ->extraAttributes([
+                    'class' => 'dashboard-card'
+                ]),
+
+            Stat::make('Total Sales Completed', '1/5')
+                ->extraAttributes([
+                    'class' => 'dashboard-card'
+                ]),
+
+            Stat::make('Approved Sales Order', '6/14')
+                ->extraAttributes([
+                    'class' => 'dashboard-card'
+                ]),
+
+            Stat::make('Total Delivered Products', '30/34')
+                ->extraAttributes([
+                    'class' => 'dashboard-card'
+                ]),
+
+            Stat::make('Total Commission Earned', 'GHs 24,500 / GHs 70,000')
+                ->extraAttributes([
+                    'class' => 'dashboard-card'
+                ]),
+
+            Stat::make('Total Approved Customers', '6/20')
+                ->extraAttributes([
+                    'class' => 'dashboard-card'
+                ]),
         ];
     }
 

@@ -29,11 +29,11 @@ class AdminPanelProvider extends PanelProvider
             ->login()
             ->colors([
                 //'primary' => Color::Amber,#9dc23b
-                'primary' => '#9dc23b',
+                'primary' => '#57a5e3',
             ])
             //->font()
             //->favicon('https://laravel.com/img/favicon/favicon-32x32.png')
-            ->darkMode(true)
+            ->darkMode(false)
             ->discoverResources(in: app_path('Filament/Resources'), for: 'App\\Filament\\Resources')
             ->discoverPages(in: app_path('Filament/Pages'), for: 'App\\Filament\\Pages')
             ->pages([

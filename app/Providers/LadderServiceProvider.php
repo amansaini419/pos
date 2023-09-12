@@ -30,15 +30,11 @@ class LadderServiceProvider extends ServiceProvider
     protected function configurePermissions(): void
     {
         Ladder::role(SubAdminRoleEnum::ADMIN->value, SubAdminRoleEnum::ADMIN->name, [
-            'subadmin', 'productGroup', 'product',
+            'subadmin', 'productGroup', 'product', 'purchase', 'inventory',
 
             'customer:viewAny', 'customer:view', 'customer:create', 'customer:update', 'customer:delete', 'customer:viewAssignedToColumn', 'customer:viewAssignedToFilter', 'customer:approve', 'customer:blacklist', 'customer:assign', 'customer:viewAssignedToField',
 
             'sale:viewAny', 'sale:view', 'sale:create', 'sale:update', 'sale:delete', 'sale:viewAssignedToColumn', 'sale:viewAssignedToFilter', 'sale:approve', 'sale:reject',
-
-            'purchase',
-
-
         ])->description('Administrator users can perform any action.');
 
         Ladder::role(SubAdminRoleEnum::SALESAGENT->value, SubAdminRoleEnum::SALESAGENT->name, [

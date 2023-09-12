@@ -30,6 +30,8 @@ class Purchase extends Model
         static::created(function($item) {
             $item->inventory()->create([
                 'inventory_type' => InventoryTypeEnum::Added->value,
+                'product_id' => $item->product_id,
+                'quantity' => $item->quantity,
             ]);
         });
 

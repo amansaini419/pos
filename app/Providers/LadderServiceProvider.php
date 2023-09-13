@@ -30,7 +30,7 @@ class LadderServiceProvider extends ServiceProvider
     protected function configurePermissions(): void
     {
         Ladder::role(SubAdminRoleEnum::ADMIN->value, SubAdminRoleEnum::ADMIN->name, [
-            'subadmin', 'productGroup', 'product', 'purchase', 'inventory',
+            'subadmin', 'productGroup', 'product', 'purchase', 'inventory', 'warehouse',
 
             'customer:viewAny', 'customer:view', 'customer:create', 'customer:update', 'customer:delete', 'customer:viewAssignedToColumn', 'customer:viewAssignedToFilter', 'customer:approve', 'customer:blacklist', 'customer:assign', 'customer:viewAssignedToField',
 
@@ -43,6 +43,7 @@ class LadderServiceProvider extends ServiceProvider
             'customer:viewAny', 'customer:create',
             'sale:viewAny', 'sale:create',
             'stockRequest:viewAny', 'stockRequest:create',
-        ])->description('Sales Agent users have the ability to read and create the customer, .');
+            'warehouse:viewAny',
+        ])->description('Sales Agent users have the ability to create customers, create sales, request stock.');
     }
 }

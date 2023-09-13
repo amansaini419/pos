@@ -307,8 +307,6 @@ class CustomerResource extends Resource
 
     public static function getEloquentQuery(): Builder
     {
-        //dd(User::join('user_role', 'users.id', '=', 'user_role.user_id')->where('role', 'sales_agent')->get()->pluck('name', 'id')/* ->where('role', 'sales_agent')->pluck('name', 'id') */);
-        //dd(parent::getEloquentQuery()->where('assigned_to', auth()->id()));
         if(auth()->user()->hasRole(SubAdminRoleEnum::SALESAGENT->value)){
             return parent::getEloquentQuery()->where('assigned_to', auth()->id())->latest();
         }

@@ -228,7 +228,7 @@ class SaleResource extends Resource
                         ->icon('heroicon-o-check')
                         ->color('success')
                         ->action(fn (Sale $record) => $record->update(['order_status' => OrderStatusEnum::Approved->value]))
-                        ->hidden(fn (Sale $record) => ($record->order_status !== OrderStatusEnum::Pending->value || !auth()->user()->hasPermission('sale:approve'))),
+                        ->hidden(fn (Sale $record) => ($record->order_status === OrderStatusEnum::Approved->value || !auth()->user()->hasPermission('sale:approve'))),
                     ActionsAction::make('reject')
                         ->label('Reject')
                         ->color('danger')
@@ -240,9 +240,9 @@ class SaleResource extends Resource
                 ])
             ])
             ->bulkActions([
-                Tables\Actions\BulkActionGroup::make([
+                /* Tables\Actions\BulkActionGroup::make([
                     Tables\Actions\DeleteBulkAction::make(),
-                ]),
+                ]), */
             ])
             ->emptyStateActions([
                 Tables\Actions\CreateAction::make(),

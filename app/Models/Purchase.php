@@ -35,6 +35,13 @@ class Purchase extends Model
             ]);
         });
 
+        static::updated(function($item) {
+            $item->inventory()->update([
+                'product_id' => $item->product_id,
+                'quantity' => $item->quantity,
+            ]);
+        });
+
         static::deleted(function($item) {
             $item->inventory()->delete();
         });

@@ -35,11 +35,14 @@ class LadderServiceProvider extends ServiceProvider
             'customer:viewAny', 'customer:view', 'customer:create', 'customer:update', 'customer:delete', 'customer:viewAssignedToColumn', 'customer:viewAssignedToFilter', 'customer:approve', 'customer:blacklist', 'customer:assign', 'customer:viewAssignedToField',
 
             'sale:viewAny', 'sale:view', 'sale:create', 'sale:update', 'sale:delete', 'sale:viewAssignedToColumn', 'sale:viewAssignedToFilter', 'sale:approve', 'sale:reject',
+
+            'stockRequest:viewAny', 'stockRequest:view', 'stockRequest:update', 'stockRequest:delete', 'stockRequest:viewRequestedByColumn', 'stockRequest:viewRequestedByFilter', 'stockRequest:approve', 'stockRequest:reject',
         ])->description('Administrator users can perform any action.');
 
         Ladder::role(SubAdminRoleEnum::SALESAGENT->value, SubAdminRoleEnum::SALESAGENT->name, [
             'customer:viewAny', 'customer:create',
             'sale:viewAny', 'sale:create',
+            'stockRequest:viewAny', 'stockRequest:create',
         ])->description('Sales Agent users have the ability to read and create the customer, .');
     }
 }
